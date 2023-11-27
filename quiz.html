@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+
+        #quiz-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        #question-container {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        #options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        #result-container {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+    <title>Simple Quiz App</title>
+</head>
+<body>
+    <div id="quiz-container">
+        <div id="question-container"></div>
+        <div id="options-container" onclick="checkAnswer(event)"></div>
+        <button id="next-button" onclick="nextQuestion()">Next</button>
+        <div id="result-container"></div>
+    </div>
+    <script>
+        // Add your JavaScript code here
+        const quizData = [
+            {
+                question: "What is the capital of France?",
+                options: ["Berlin", "Madrid", "Paris", "Rome"],
+                correctAnswer: "Paris"
+            },
+            {
+                question: "Which planet is known as the Red Planet?",
+                options: ["Earth", "Mars", "Jupiter", "Venus"],
+                correctAnswer: "Mars"
+            },
+            {
+                question: "What is the largest mammal?",
+                options: ["Elephant", "Blue Whale", "Giraffe", "Hippopotamus"],
+                correctAnswer: "Blue Whale"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const questionContainer = document.getElementById('question-container');
+            const optionsContainer = document.getElementById('options-container');
+            const nextButton = document.getElementById('next-button');
+
+            const currentQuizData = quizData[currentQuestion];
+
+            questionContainer.innerText = currentQuizData.question;
+            optionsContainer.innerHTML = "";
+
+            currentQuizData.options.forEach((option) => {
+                const button = document.createElement('button');
+                button.innerText = option;
+                optionsContainer.appendChild(button);
+            });
+
+            nextButton.style.display = 'none';
+        }
+
+        function checkAnswer(event) {
+            const selectedOption = event.target.innerText;
+            const currentQuizData = quizData[currentQuestion];
+
+            if (selectedOption === currentQuizData.correctAnswer) {
+                score++;
+            }
+
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = `<p>Your answer: ${selectedOption}</p>`;
+
+            const nextButton = document.getElementById('next-button');
+            nextButton.style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            const resultContainer = document.getElementById('result-container');
+            resultContainer.innerText = `Your final score is ${score}/${quizData.length}.`;
+        }
+
+        // Load the first question when the page loads
+        loadQuestion();
+    </script>
+</body>
+</html>
